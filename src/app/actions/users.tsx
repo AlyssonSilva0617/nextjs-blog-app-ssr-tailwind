@@ -1,11 +1,16 @@
 'use server'
 
 import api from '@/lib/api'
-import {UserType} from '@/utils/types/user'
+import { UserType } from '@/utils/types/user'
 
 export const fetchUser = async (
-  userId: string | string[],
+    userId: string | string[],
 ): Promise<UserType> => {
-  const res = await api.get<UserType>(`users/${userId}`)
-  return res.data
+    const res = await api.get<UserType>(`users/${userId}`)
+    return res.data
+}
+
+export const fetchUsers = async (): Promise<UserType[]> => {
+    const res = await api.get<UserType[]>(`users`)
+    return res.data
 }
