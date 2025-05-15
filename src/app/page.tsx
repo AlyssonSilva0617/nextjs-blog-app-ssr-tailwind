@@ -1,10 +1,10 @@
 'use client'
 
-import { Card, List } from 'antd';
-import Link from 'next/link';
-import { PostType } from '@/utils/types/posts';
-import { useEffect, useState } from 'react';
-import { fetchPostsData } from './actions/posts';
+import {Card, List} from 'antd'
+import Link from 'next/link'
+import {PostType} from '@/utils/types/posts'
+import {useEffect, useState} from 'react'
+import {fetchPostsData} from './actions/posts'
 
 const Page = () => {
   const [posts, setPosts] = useState<PostType[] | null>(null)
@@ -22,22 +22,19 @@ const Page = () => {
       <h1 className="text-3xl font-bold mb-6">Blog Posts</h1>
       {posts && (
         <List
-          grid={{ gutter: 16, column: 2 }}
+          grid={{gutter: 16, column: 2}}
           dataSource={posts}
           renderItem={(post) => (
             <List.Item>
               <Link href={`/posts/${post.id}`}>
-                <Card
-                  hoverable
-                  title={post.title}
-                  className="cursor-pointer"
-                >
+                <Card hoverable title={post.title} className="cursor-pointer">
                   <p className="line-clamp-3 text-gray-700">{post.body}</p>
                 </Card>
               </Link>
             </List.Item>
           )}
-        />)}
+        />
+      )}
     </main>
   )
 }
