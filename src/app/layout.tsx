@@ -1,4 +1,3 @@
-// src/app/layout.tsx
 import 'antd/dist/reset.css'; // AntD global styles (v5+)
 import '../styles/globals.css'; // Tailwind base styles
 
