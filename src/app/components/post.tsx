@@ -1,17 +1,18 @@
 'use client'
 
 import Link from 'next/link'
-import React, {useEffect, useState} from 'react'
-import {useStore} from '@/store/useStore'
-import {UserType} from '@/utils/types/user'
+import React, { useEffect, useState } from 'react'
+import { useStore } from '@/store/useStore'
+import { UserType } from '@/utils/types/user'
+import { PostType } from '@/utils/types/posts'
 
-export default function Post({post}: {post: any}) {
-  const {users} = useStore()
+export default function Post({ post }: { post: PostType }) {
+  const { users } = useStore()
   const [author, setPostAuthor] = useState<UserType | null>(null)
   useEffect(() => {
     const postAuthor = users.find((item: UserType) => item.id === post.userId)
     if (postAuthor) setPostAuthor(postAuthor)
-  }, [post])
+  }, [post, users])
 
   return (
     <div className="mx-auto p-6 group">
