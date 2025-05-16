@@ -1,7 +1,11 @@
-import type {NextConfig} from 'next'
+import type {Config} from 'tailwindcss'
 
-const nextConfig: NextConfig = {
-  /* config options here */
+const config: Config = {
+  content: ['./app/**/*.{js,ts,jsx,tsx}'],
+  theme: {
+    extend: {},
+  },
+  plugins: [require('@tailwindcss/line-clamp')],
 }
 
-export default nextConfig
+export default config

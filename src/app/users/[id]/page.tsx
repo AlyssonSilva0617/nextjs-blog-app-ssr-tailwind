@@ -1,16 +1,22 @@
 'use client'
 
-import { Card, List, Spin, Avatar, Row, Col } from 'antd'
-import { useEffect } from 'react'
-import { useParams } from 'next/navigation'
-import { useStore } from '@/store/useStore' // Import Zustand store
-import { fetchPostsDataByUserId } from '@/app/actions/posts' // Replace with actual fetch function
-import { fetchCommentsByPostId } from '@/app/actions/comments' // New fetch function for comments
+import {Card, List, Row, Col} from 'antd'
+import {useEffect, useState} from 'react'
+import {useParams} from 'next/navigation'
+import {useStore} from '@/store/useStore' // Import Zustand store
+import {fetchPostsDataByUserId} from '@/app/actions/posts' // Replace with actual fetch function
 import Link from 'next/link'
+import Loading from '@/app/components/loading'
+import {RollbackOutlined} from '@ant-design/icons'
+import {PostType} from '@/utils/types/posts'
+import {UserType} from '@/utils/types/user'
+import {fetchUser} from '@/app/actions/users'
 
 export default function UserPage() {
-  const { id } = useParams() // Get user ID from URL
-  const { posts, loading, author, setPosts, setLoading } = useStore() // Zustand store
+  const {id} = useParams() // Get user ID from URL
+  const {loading, setLoading, comments} = useStore() // Zustand store
+  const [userPosts, setUserPosts] = useState<PostType[] | null>(null)
+  const [author, setAuthor] = useState<UserType | null>(null)
 
   useEffect(() => {
     if (id) {
@@ -18,15 +24,20 @@ export default function UserPage() {
         setLoading(true) // Set loading state to true while fetching
 
         try {
+          setAuthor(await fetchUser(id))
           // Fetch posts written by the user
           const postsResponse = await fetchPostsDataByUserId(id) // Fetch posts
           const postsWithComments = await Promise.all(
             postsResponse.map(async (post) => {
-              const comments = await fetchCommentsByPostId(post.id) // Fetch comments for each post
-              return { ...post, comments } // Add comments to each post
+              const tmpComments = comments?.filter(
+                (item) => item.postId === Number(id),
+              ) // Fetch tmpCfor each post
+              if (tmpComments)
+                return {...post, comments: tmpComments} // Add comments to each post
+              else return post
             }),
           )
-          setPosts(postsWithComments)
+          setUserPosts(postsWithComments)
 
           setLoading(false) // Set loading to false after data is fetched
         } catch (error) {
@@ -37,26 +48,28 @@ export default function UserPage() {
 
       fetchUserData()
     }
-  }, [id, setPosts, setLoading])
+  }, [id])
 
-  if (loading) {
-    return (
-      <Spin
-        size="large"
-        className="h-screen w-full flex justify-center items-center"
-      />
-    )
-  }
+  if (loading) return <Loading />
 
   return (
-    <main className="max-w-screen-xl mx-auto p-6">
+    <div className="max-w-screen-xl mx-auto p-6">
       <div className="bg-gray-100 p-4 rounded-lg mb-4">
-        <h3 className="text-lg font-semibold">About the Author</h3>
+        <h3 className="text-lg font-semibold">
+          <Link href={'/'} className="float-right text-based">
+            <RollbackOutlined />
+          </Link>{' '}
+          About the Author
+        </h3>
         {/* Display user info with avatar */}
         {author && (
           <Row>
             <Col span={2} offset={1}>
-              <Avatar src="https://api.dicebear.com/9.x/avataaars/svg" alt="Cosima avatar" className="w-12 h-12 rounded-md shadow-md" />
+              <img
+                src="/avatar.jpg"
+                alt="Cosima avatar"
+                className="w-12 h-12 rounded-md shadow-md"
+              />
             </Col>
             <Col span={5}>
               <p>Name: {author.name}</p>
@@ -64,28 +77,30 @@ export default function UserPage() {
             </Col>
             <Col span={5}>
               <p>
-                <a href={author.website}>Website: {author.website}</a>
+                <Link href={''}>Website: {author.website}</Link>
               </p>
               <p>Phone: {author.phone}</p>
             </Col>
             <Col span={6}>
               <p>Company: {author?.company.name}</p>
-              <p>Address: {author.address.suite}, {author.address.street}, {author.address.city}</p>
+              <p>
+                Address: {author.address.suite}, {author.address.street},{' '}
+                {author.address.city}
+              </p>
             </Col>
           </Row>
         )}
       </div>
 
-
       {/* Check if posts are null or empty */}
-      {posts === null || posts.length === 0 ? (
+      {userPosts === null || userPosts.length === 0 ? (
         <p className="text-center text-gray-500">
           No posts available for this user.
         </p>
       ) : (
         <List
-          grid={{ gutter: 16, column: 2 }}
-          dataSource={posts}
+          grid={{gutter: 16, column: 2}}
+          dataSource={userPosts}
           renderItem={(post) => (
             <List.Item key={post.id}>
               <Link href={`/posts/${post.id}`}>
@@ -116,6 +131,6 @@ export default function UserPage() {
           )}
         />
       )}
-    </main>
+    </div>
   )
 }

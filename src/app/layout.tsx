@@ -1,5 +1,5 @@
-import 'antd/dist/reset.css' // AntD global styles (v5+)
-import '../styles/globals.css' // Tailwind base styles
+import 'antd/dist/reset.css'
+import '../styles/globals.css'
 import Navbar from './components/header'
 
 export const metadata = {
@@ -7,11 +7,15 @@ export const metadata = {
   description: 'Blog app with Next.js, AntD, Tailwind CSS',
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang="en">
-      <Navbar />
-      <body className="bg-gray-50 min-h-screen">{children}</body>
+      <body className="bg-gray-50 min-h-screen">
+        <div className="bg-[url('/bg.jpg')] bg-cover bg-center w-screen h-screen overflow-y-auto">
+          <Navbar />
+          {children}
+        </div>
+      </body>
     </html>
   )
 }
