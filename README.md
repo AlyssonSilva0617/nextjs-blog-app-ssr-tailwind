@@ -11,7 +11,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 1. **Clone the repository**
 
 ```bash
-git clone https://github.com/AlyssonSilva0617/nenextjs-blog-app-ssr-tailwind.git
+git clone https://github.com/AlyssonSilva0617/nextjs-blog-app-ssr-tailwind.git
 
 cd my-blog-app
 
@@ -45,9 +45,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## 🚀 Live Demo
 
-**Production**: [https://my-blog-app.vercel.app](https://my-blog-app.vercel.app)
+**Production**: [https://blog-site-eosin.vercel.app](https://blog-site-eosin.vercel.app)
 
-**Repository**: [https://github.com/johndoe/my-blog-app](https://github.com/johndoe/my-blog-app)
+**Repository**: [https://github.com/AlyssonSilva0617/nextjs-blog-app-ssr-tailwind.git](https://github.com/AlyssonSilva0617/nextjs-blog-app-ssr-tailwind.git)
 
 ---
 
